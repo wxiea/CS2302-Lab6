@@ -7,6 +7,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import random
+import time
+import dsf
 
 def draw_maze(walls,maze_rows,maze_cols,cell_nums=False):
     fig, ax = plt.subplots()
@@ -50,13 +52,24 @@ plt.close("all")
 maze_rows = 10
 maze_cols = 15
 
+maze = dsf.DisjointSetForest(maze_rows*maze_cols)
 walls = wall_list(maze_rows,maze_cols)
 
 draw_maze(walls,maze_rows,maze_cols,cell_nums=True) 
-
-for i in range(len(walls)//2): #Remove 1/2 of the walls 
-    d = random.randint(0,len(walls)-1)
-    print('removing wall ',walls[d])
+ 
+for i in range(len(maze)*2):   
+    d = random.randint(0, len(walls)-1)
+    if dsf.union(maze, walls[d][1], walls[d][0]):
+        walls.pop(d)
+"""
+if dsf.union_c(maze, walls[d][0], walls[d][1]):
     walls.pop(d)
+"""   
+#print(walls)
+#d = random.randint(0, len(walls)-1)
+#print(walls[d][1], walls[d][0])
+
 
 draw_maze(walls,maze_rows,maze_cols) 
+plt.show()
+print((time.time() - start))
